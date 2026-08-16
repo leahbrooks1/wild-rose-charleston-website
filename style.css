@@ -1,0 +1,216 @@
+/* 
+   Wild Rose Charleston Website Redesign
+   Brand Theme:
+   Primary Sage Green: #6B8E6E
+   Background Cream: #F8F6F1
+   Foreground/Text: #2F5D50
+   Accent Beige: #DCC9A8
+   White: #FFFFFF
+*/
+
+:root {
+    --sage-green: #6B8E6E;
+    --cream: #F8F6F1;
+    --dark-green: #2F5D50;
+    --beige: #DCC9A8;
+    --white: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-green);
+    background-color: var(--cream);
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    background-color: var(--white);
+    border-bottom: 3px solid var(--sage-green);
+    padding: 1.5rem 0;
+}
+
+header h1 {
+    margin: 0;
+    color: var(--dark-green);
+}
+
+header p {
+    margin-top: 0.25rem;
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+}
+
+nav a {
+    color: var(--dark-green);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav a:hover,
+nav a:focus {
+    text-decoration: underline;
+}
+
+main {
+    min-height: 70vh;
+}
+
+.hero {
+    background-color: var(--beige);
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-top: 0;
+}
+
+.hero p {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+.page-intro {
+    background-color: var(--beige);
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.page-intro h2 {
+    margin-top: 0;
+    font-size: 2.25rem;
+}
+
+section {
+    padding: 3rem 0;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.card,
+.checkout-card {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--beige);
+}
+
+.card h3 {
+    color: var(--dark-green);
+}
+
+.price {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.button {
+    display: inline-block;
+    background-color: var(--dark-green);
+    color: var(--white);
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid var(--dark-green);
+    cursor: pointer;
+}
+
+.button:hover,
+.button:focus {
+    background-color: var(--sage-green);
+    border-color: var(--sage-green);
+}
+
+.content-section {
+    max-width: 800px;
+}
+
+.contact-section {
+    max-width: 700px;
+}
+
+form div {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--sage-green);
+    border-radius: 5px;
+    font: inherit;
+    background-color: var(--white);
+}
+
+input:focus,
+textarea:focus {
+    outline: 3px solid var(--beige);
+}
+
+footer {
+    background-color: var(--dark-green);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+footer p {
+    margin: 0.25rem 0;
+}
+
+/* Responsive layout for tablets and mobile devices */
+@media (max-width: 768px) {
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .hero {
+        padding: 3rem 0;
+    }
+
+    .hero h2 {
+        font-size: 2rem;
+    }
+}
