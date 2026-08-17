@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contact Wild Rose Charleston and learn more about scheduling an appointment.">
+    <meta name="description" content="Contact Wild Rose Charleston.">
     <title>Contact | Wild Rose Charleston</title>
+
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -30,10 +32,10 @@
 
     <section class="page-intro">
         <div class="container">
-            <h2>Contact Wild Rose Charleston</h2>
+            <h2>Contact Us</h2>
             <p>
-                Have a question? Get in touch with the practice or schedule
-                an appointment online.
+                Have a question about Wild Rose Charleston?
+                Send us a message using the form below.
             </p>
         </div>
     </section>
@@ -43,28 +45,52 @@
 
             <h2>Get in Touch</h2>
 
-            <p>
-                For questions about services or appointments, please contact
-                Wild Rose Charleston.
-            </p>
+            <div id="formMessage" aria-live="polite"></div>
 
-            <form>
+            <form id="contactForm" novalidate>
+
                 <div>
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="fullName">Full Name</label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                    >
                 </div>
 
                 <div>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="subject">Subject</label>
+                    <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                    >
                 </div>
 
                 <div>
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="6"
+                        required
+                    ></textarea>
                 </div>
 
-                <button type="submit" class="button">Send Message</button>
+                <button type="submit" class="button">
+                    Send Message
+                </button>
+
             </form>
 
         </div>
@@ -75,6 +101,7 @@
 <footer>
     <div class="container">
         <p>&copy; 2026 Wild Rose Charleston. All rights reserved.</p>
+        <p>Website redesign project by Leah Brooks.</p>
     </div>
 </footer>
 

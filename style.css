@@ -214,3 +214,35 @@ footer p {
         font-size: 2rem;
     }
 }
+/* Responsive service display */
+
+#service-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+#service-container .card {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--beige);
+}
+
+#service-container .price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--dark-green);
+}
+
+@media (max-width: 768px) {
+    #service-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1000px) {
+    #service-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
