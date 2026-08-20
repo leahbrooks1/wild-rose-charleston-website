@@ -74,7 +74,7 @@ services.forEach(function(service) {
         <p><strong>Duration:</strong> ${service.duration}</p>
         <p>${service.description}</p>
         <p class="price">${service.price}</p>
-        <a class="button" href="checkout.html">Book Now</a>
+        <button class="button" onclick="addToCart('${service.name}')">Add to Cart</button>
     `;
 
     serviceContainer.appendChild(serviceCard);
@@ -200,4 +200,44 @@ function applyCoupon(total) {
     }
 
     return total;
+}
+// ==============================
+// Smart Cart
+// ==============================
+
+let cart = JSON.parse(localStorage.getItem("wildRoseCart")) || [];
+
+function saveCart() {
+    localStorage.setItem("wildRoseCart", JSON.stringify(cart));
+}
+
+function getNumericPrice(price) {
+    return Number(price.replace("$", ""));
+}
+
+function addToCart(serviceName) {
+    const service = services.find(function(item) {
+        return item.name === serviceName;
+    });
+
+    if (!service) {
+        return;
+    }
+
+    const existingItem = cart.find(function(item) {
+        return item.name === service.name;
+    });
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            name: service.name,
+            price: getNumericPrice(service.price),
+            quantity: 1
+        });
+    }
+
+    saveCart();
+    alert(service.name + " added to cart!");
 }
