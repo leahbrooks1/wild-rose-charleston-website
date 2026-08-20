@@ -60,25 +60,64 @@ const services = [
         description: "An extended individualized acupuncture session with additional time for treatment and care."
     }
 ];
+// Give each service a starting inventory of 5
+services.forEach(function(service) {
+    service.stock = 5;
+});
+let cart = JSON.parse(localStorage.getItem("wildRoseCart")) || [];
+function getAvailableStock(serviceName) {
+    const service = services.find(function(item) {
+        return item.name === serviceName;
+    });
 
+    if (!service) {
+        return 0;
+    }
+
+    const cartItem = cart.find(function(item) {
+        return item.name === serviceName;
+    });
+
+    const quantityInCart = cartItem ? cartItem.quantity : 0;
+
+    return service.stock - quantityInCart;
+}
 const serviceContainer = document.getElementById("service-container");
 
-services.forEach(function(service) {
+function renderServices() {
+    if (!serviceContainer) {
+        return;
+    }
 
-    const serviceCard = document.createElement("article");
+    serviceContainer.innerHTML = "";
 
-    serviceCard.className = "card";
+    services.forEach(function(service) {
+        const availableStock = getAvailableStock(service.name);
 
-    serviceCard.innerHTML = `
-        <h3>${service.name}</h3>
-        <p><strong>Duration:</strong> ${service.duration}</p>
-        <p>${service.description}</p>
-        <p class="price">${service.price}</p>
-        <button class="button" onclick="addToCart('${service.name}')">Add to Cart</button>
-    `;
+        const serviceCard = document.createElement("article");
+        serviceCard.className = "card";
 
-    serviceContainer.appendChild(serviceCard);
-});
+        serviceCard.innerHTML = `
+            <h3>${service.name}</h3>
+            <p><strong>Duration:</strong> ${service.duration}</p>
+            <p>${service.description}</p>
+            <p class="price">${service.price}</p>
+            <p><strong>Available:</strong> ${availableStock}</p>
+
+            <button
+                class="button"
+                onclick="addToCart('${service.name}')"
+                ${availableStock === 0 ? 'disabled title="Out of Stock"' : ''}
+            >
+                ${availableStock === 0 ? "Out of Stock" : "Add to Cart"}
+            </button>
+        `;
+
+        serviceContainer.appendChild(serviceCard);
+    });
+}
+
+renderServices();
 // ==============================
 // Contact Form Validation
 // ==============================
@@ -162,9 +201,15 @@ if (checkoutForm) {
         }
 
         checkoutMessage.textContent =
-            "All required information has been completed.";
+            "Order confirmed! Thank you for your purchase.";
 
         checkoutMessage.style.color = "green";
+        cart = [];
+    saveCart();
+    renderCheckoutSummary();
+
+    checkoutMessage.textContent =
+    "Order confirmed! Thank you for your purchase.";
     });
 }
 
@@ -205,7 +250,6 @@ function applyCoupon(total) {
 // Smart Cart
 // ==============================
 
-let cart = JSON.parse(localStorage.getItem("wildRoseCart")) || [];
 
 function saveCart() {
     localStorage.setItem("wildRoseCart", JSON.stringify(cart));
@@ -222,6 +266,13 @@ function addToCart(serviceName) {
 
     if (!service) {
         return;
+        const availableStock = getAvailableStock(service.name);
+
+    if (availableStock <= 0) {
+    alert("This item is out of stock.");
+    renderServices();
+    return;
+}
     }
 
     const existingItem = cart.find(function(item) {
@@ -239,5 +290,137 @@ function addToCart(serviceName) {
     }
 
     saveCart();
+    renderCart();
+    renderServices();
     alert(service.name + " added to cart!");
 }
+function renderCart() {
+    const cartItems = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
+
+    if (!cartItems || !cartTotal) {
+        return;
+    }
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotal.textContent = "0.00";
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach(function(item, index) {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const cartItem = document.createElement("div");
+
+        cartItem.innerHTML = `
+            <p>
+                <strong>${item.name}</strong><br>
+                Price: $${item.price.toFixed(2)}<br>
+                Quantity: ${item.quantity}<br>
+                Item Total: $${itemTotal.toFixed(2)}
+            </p>
+
+            <button type="button" onclick="decreaseQuantity(${index})">-</button>
+            <button type="button" onclick="increaseQuantity(${index})">+</button>
+            <button type="button" onclick="removeFromCart(${index})">Remove</button>
+        `;
+
+        cartItems.appendChild(cartItem);
+    });
+
+    cartTotal.textContent = total.toFixed(2);
+}
+
+function increaseQuantity(index) {
+    const cartItem = cart[index];
+
+    const service = services.find(function(item) {
+        return item.name === cartItem.name;
+    });
+
+    if (!service) {
+        return;
+    }
+
+    if (cartItem.quantity >= service.stock) {
+        alert("This item is out of stock.");
+        return;
+    }
+
+    cartItem.quantity += 1;
+
+    saveCart();
+    renderCart();
+    renderServices();
+}
+
+function decreaseQuantity(index) {
+    if (cart[index].quantity > 1) {
+        cart[index].quantity -= 1;
+    } else {
+        cart.splice(index, 1);
+    }
+
+    saveCart();
+    renderCart();
+    renderServices();
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+    renderServices();
+}
+
+function clearCart() {
+    cart = [];
+    saveCart();
+    renderCart();
+    renderServices();
+}
+
+renderCart();
+function renderCheckoutSummary() {
+    const checkoutItems = document.getElementById("checkout-cart-items");
+    const checkoutTotal = document.getElementById("checkout-cart-total");
+
+    if (!checkoutItems || !checkoutTotal) {
+        return;
+    }
+
+    checkoutItems.innerHTML = "";
+
+    if (cart.length === 0) {
+        checkoutItems.innerHTML = "<p>Your cart is empty.</p>";
+        checkoutTotal.textContent = "0.00";
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach(function(item) {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const itemElement = document.createElement("p");
+        itemElement.textContent =
+            item.name +
+            " — Qty: " +
+            item.quantity +
+            " — $" +
+            itemTotal.toFixed(2);
+
+        checkoutItems.appendChild(itemElement);
+    });
+
+    checkoutTotal.textContent = total.toFixed(2);
+}
+
+renderCheckoutSummary();
